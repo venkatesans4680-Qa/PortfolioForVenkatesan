@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Venkatesan S — QA Automation Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Backgrounds — soft lavender white */
+      --bg:        #f5f3ff;
+      --bg2:       #ede9fe;
+      --surface:   #ffffff;
+      --surface2:  #f8f6ff;
+
+      /* Borders */
+      --border:        rgba(109,40,217,0.11);
+      --border-bright: rgba(109,40,217,0.22);
+
+      /* Text */
+      --text:       #1e1030;
+      --text-muted: #5b3e8f;
+      --text-dim:   #a78dbf;
+
+      /* Purple scale */
+      --p100: #f5f3ff;
+      --p200: #ede9fe;
+      --p300: #c4b5fd;
+      --p400: #a78bfa;
+      --p500: #8b5cf6;
+      --p600: #7c3aed;
+      --p700: #6d28d9;
+      --p800: #5b21b6;
+      --p900: #4c1d95;
+
+      /* Dims / glows */
+      --purple-dim:  rgba(109,40,217,0.09);
+      --purple-dim2: rgba(109,40,217,0.15);
+      --purple-glow: rgba(109,40,217,0.28);
+
+      /* Support */
+      --indigo:  #4f46e5;
+      --violet:  #7c3aed;
+      --slate:   #6366f1;
+      --amber:   #f59e0b;
+      --gold:    #b45309;
+      --teal:    #0d9488;
+
+      /* Gradients */
+      --grad-main:   linear-gradient(135deg, #6d28d9 0%, #8b5cf6 50%, #a78bfa 100%);
+      --grad-deep:   linear-gradient(135deg, #4c1d95 0%, #6d28d9 60%, #7c3aed 100%);
+      --grad-soft:   linear-gradient(135deg, #8b5cf6 0%, #c4b5fd 100%);
+      --grad-violet: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      --grad-teal:   linear-gradient(135deg, #0d9488 0%, #6d28d9 100%);
+      --grad-amber:  linear-gradient(135deg, #f59e0b 0%, #7c3aed 100%);
+      --grad-name:   linear-gradient(135deg, #3b0764 0%, #6d28d9 40%, #8b5cf6 75%, #c4b5fd 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* LAVENDER MESH */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 65% 55% at 0%   0%,   rgba(109,40,217,0.13) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 45% at 100%  8%,  rgba(79,70,229,0.09)  0%, transparent 55%),
+        radial-gradient(ellipse 50% 55% at 90%  100%, rgba(139,92,246,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 40% at 0%   100%, rgba(196,181,253,0.12)0%, transparent 55%),
+        radial-gradient(ellipse 35% 35% at 50%   50%, rgba(167,139,250,0.05)0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── NAVBAR ─── */
+    .navbar {
+      position: fixed;
+      top: 20px;
+      right: 32px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1.5px solid rgba(109,40,217,0.22);
+      border-radius: 50px;
+      padding: 5px 7px;
+      box-shadow:
+        0 4px 28px rgba(109,40,217,0.12),
+        0 1px 0 rgba(255,255,255,0.95) inset;
+      animation: slideInRight 0.6s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .navbar a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      color: var(--text-muted);
+      padding: 7px 16px;
+      border-radius: 40px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .navbar a:hover {
+      color: var(--p700);
+      background: var(--purple-dim);
+    }
+
+    .navbar a.active {
+      color: #fff;
+      background: var(--grad-main);
+      box-shadow: 0 2px 14px var(--purple-glow);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 4rem;
+      align-items: center;
+      padding: 6rem 5rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Eyebrow pill */
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--p700);
+      margin-bottom: 1.6rem;
+      padding: 6px 14px 6px 10px;
+      border: 1.5px solid rgba(109,40,217,0.22);
+      border-radius: 30px;
+      background: rgba(255,255,255,0.80);
+      width: fit-content;
+      box-shadow: 0 2px 10px rgba(109,40,217,0.08);
+      position: relative;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--p500);
+      flex-shrink: 0;
+      animation: pulse 2.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0   rgba(109,40,217,0.55); }
+      55%      { box-shadow: 0 0 0 7px rgba(109,40,217,0);    }
+    }
+
+    /* ── NAME BLOCK — purple gradient background ── */
+    .hero-name-wrap {
+      display: inline-block;
+      position: relative;
+      margin-bottom: 1rem;
+      /* Ensure this stacks BELOW the eyebrow */
+      z-index: 1;
+      isolation: isolate;
+    }
+
+    .hero-name-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -12px -20px;
+      background: var(--grad-name);
+      border-radius: 20px;
+      z-index: -1;
+      box-shadow:
+        0 0 40px rgba(109,40,217,0.35),
+        0 0 100px rgba(139,92,246,0.18);
+    }
+
+    .hero-name-wrap::after { display: none; }
+
+    .hero-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: clamp(3rem, 5.5vw, 5.2rem);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      position: relative;
+      text-shadow: 0 2px 24px rgba(76,29,149,0.5);
+    }
+
+    .hero-role {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.1rem, 2vw, 1.65rem);
+      line-height: 1.3;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .hero-role span { color: var(--p700); font-weight: 600; }
+
+    .hero-company {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      letter-spacing: 0.07em;
+      color: var(--text-dim);
+      margin-bottom: 1.8rem;
+      text-transform: uppercase;
+    }
+
+    .hero-company strong { color: var(--amber); font-weight: 600; }
+
+    .hero-desc {
+      font-size: 1rem;
+      line-height: 1.78;
+      color: var(--text-muted);
+      max-width: 490px;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.2rem; }
+
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.63rem;
+      letter-spacing: 0.06em;
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-bright);
+      color: var(--text-muted);
+      background: var(--surface);
+      transition: all 0.2s;
+      box-shadow: 0 1px 4px rgba(109,40,217,0.05);
+    }
+
+    .badge:hover { border-color: var(--p600); color: var(--p700); background: var(--purple-dim); }
+
+    .badge.highlight {
+      background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+      border-color: var(--p400);
+      color: var(--p700);
+      font-weight: 600;
+    }
+
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.78rem 1.75rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: all 0.22s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--grad-deep);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--purple-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px var(--purple-glow);
+      filter: brightness(1.08);
+    }
+
+    .btn-outline {
+      background: var(--surface);
+      color: var(--text);
+      border: 1.5px solid var(--border-bright);
+      box-shadow: 0 2px 8px rgba(109,40,217,0.06);
+    }
+    .btn-outline:hover {
+      border-color: var(--p600);
+      color: var(--p700);
+      background: var(--purple-dim);
+      transform: translateY(-2px);
+    }
+
+    /* ── HERO CARD ── */
+    .hero-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border-bright);
+      border-radius: 24px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(109,40,217,0.10);
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--grad-name);
+    }
+
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      bottom: -50px; right: -50px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(109,40,217,0.07), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hackathon-banner {
+      background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+      border: 1.5px solid var(--p300);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hackathon-banner .trophy { font-size: 1.3rem; }
+
+    .hackathon-banner p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.05em;
+      color: var(--p800);
+      line-height: 1.5;
+    }
+
+    .hackathon-banner strong { color: var(--p900); }
+
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; position: relative; z-index: 1; }
+
+    .stat { padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
+    .stat:nth-child(3), .stat:nth-child(4) { border-bottom: none; padding-bottom: 0; }
+
+    .stat-num {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2.1rem;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      background: var(--grad-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 0.3rem;
+    }
+
+    /* ─── SECTION LAYOUT ─── */
+    section, .achievements-strip { position: relative; z-index: 1; }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 5rem;
+    }
+
+    .section-label span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.63rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--p600);
+      white-space: nowrap;
+    }
+
+    .section-label hr {
+      flex: 1;
+      border: none;
+      border-top: 1.5px solid rgba(109,40,217,0.13);
+    }
+
+    .section-h {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .section-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ─── TOOLS ─── */
+    .tools-section { padding: 4rem 5rem; }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .tool-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 1.75rem;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(109,40,217,0.05);
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      opacity: 0.65;
+      transition: opacity 0.25s;
+    }
+
+    .tool-card.playwright::before { background: var(--grad-main); }
+    .tool-card.tamper::before     { background: var(--grad-teal); }
+    .tool-card.env::before        { background: var(--grad-amber); }
+
+    .tool-card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; right: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .tool-card.playwright::after { background: radial-gradient(circle, rgba(109,40,217,0.07), transparent 70%); }
+    .tool-card.tamper::after     { background: radial-gradient(circle, rgba(13,148,136,0.07), transparent 70%); }
+    .tool-card.env::after        { background: radial-gradient(circle, rgba(245,158,11,0.07), transparent 70%); }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(109,40,217,0.25);
+      box-shadow: 0 16px 48px rgba(109,40,217,0.11);
+    }
+    .tool-card:hover::before { opacity: 1; }
+    .tool-card:hover::after  { opacity: 1; }
+
+    .tool-type {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .playwright-tag { background: var(--purple-dim);          color: var(--p700); border: 1px solid rgba(109,40,217,0.2); }
+    .script-tag     { background: rgba(13,148,136,0.09);      color: var(--teal); border: 1px solid rgba(13,148,136,0.22); }
+    .env-tag        { background: rgba(245,158,11,0.09);      color: var(--gold); border: 1px solid rgba(245,158,11,0.22); }
+
+    .tool-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+
+    .tool-desc { font-size: 0.84rem; line-height: 1.72; color: var(--text-muted); }
+
+    .tool-impact {
+      margin-top: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+    }
+
+    .impact-num {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.55rem;
+      background: var(--grad-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .impact-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .tool-tech { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    .tech-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 5px;
+      transition: all 0.2s;
+    }
+
+    .tech-tag:hover { color: var(--p700); border-color: rgba(109,40,217,0.28); background: var(--purple-dim); }
+
+    /* ─── ACHIEVEMENTS ─── */
+    .achievements-strip {
+      padding: 3.5rem 5rem;
+      background: linear-gradient(135deg, #1e0a3c 0%, #2e1065 50%, #3b0764 100%);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .achievements-strip::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(167,139,250,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(167,139,250,0.06) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+    }
+
+    .achievements-strip::after {
+      content: '';
+      position: absolute;
+      top: -80px; right: 15%;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(139,92,246,0.15), transparent 70%);
+      pointer-events: none;
+    }
+
+    .achievement {
+      border-right: 1px solid rgba(255,255,255,0.08);
+      padding-right: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .achievement:last-child { border-right: none; }
+
+    .achievement-num {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 3rem;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      background: var(--grad-soft);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .achievement-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      color: rgba(196,181,253,0.55);
+      margin-top: 0.4rem;
+      line-height: 1.4;
+    }
+
+    /* ─── SKILLS ─── */
+    .skills-section { padding: 4rem 5rem; }
+    .skills-categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
+
+    .skill-category {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(109,40,217,0.04);
+    }
+
+    .skill-category:hover { border-color: var(--border-bright); box-shadow: 0 6px 24px rgba(109,40,217,0.09); }
+
+    .skill-category-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: var(--grad-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .skill-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.67rem;
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+      background: var(--surface2);
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .skill-pill:hover { color: var(--p700); border-color: rgba(109,40,217,0.28); background: var(--purple-dim); }
+    .skill-pill.core  { background: var(--purple-dim); color: var(--p700); border-color: rgba(109,40,217,0.25); font-weight: 500; }
+
+    /* ─── EXPERIENCE ─── */
+    .experience-section { padding: 4rem 5rem; }
+
+    .exp-entry {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .exp-entry:last-child { border-bottom: none; }
+
+    .exp-company { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--text); }
+
+    .exp-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--grad-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-top: 0.35rem;
+      font-weight: 500;
+    }
+
+    .exp-period {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      margin-top: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .exp-right { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .exp-item {
+      font-size: 0.87rem;
+      line-height: 1.72;
+      color: var(--text-muted);
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .exp-item::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--p500);
+      font-size: 0.7rem;
+      top: 0.18rem;
+    }
+
+    .exp-item strong { color: var(--text); font-weight: 600; }
+
+    /* ─── EDUCATION ─── */
+    .education-section { padding: 4rem 5rem; }
+    .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+    .edu-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1.5rem 1.5rem 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(109,40,217,0.04);
+    }
+
+    .edu-card:hover { border-color: var(--border-bright); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(109,40,217,0.10); }
+
+    .edu-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+    .edu-card.degree::before { background: var(--grad-name); }
+    .edu-card.cert::before   { background: var(--grad-violet); }
+
+    .edu-type { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem; }
+    .edu-title { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1rem; color: var(--text); margin-bottom: 0.3rem; }
+    .edu-institution { font-size: 0.82rem; color: var(--text-muted); }
+
+    .edu-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      background: var(--grad-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-top: 0.6rem;
+    }
+
+    /* ─── CONTACT ─── */
+    .contact-section {
+      padding: 6rem 5rem;
+      background: var(--surface);
+      border-top: 1.5px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-section::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(109,40,217,0.08), transparent 65%);
+      pointer-events: none;
+    }
+
+    .contact-section::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(79,70,229,0.07), transparent 65%);
+      pointer-events: none;
+    }
+
+    .contact-section h2 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-section h2 em {
+      font-style: italic;
+      background: var(--grad-name);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .contact-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      margin-bottom: 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-links { display: flex; gap: 1rem; flex-wrap: wrap; position: relative; z-index: 1; }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      border: 1.5px solid var(--border-bright);
+      padding: 0.72rem 1.4rem;
+      border-radius: 12px;
+      background: var(--surface2);
+      transition: all 0.22s ease;
+      box-shadow: 0 2px 8px rgba(109,40,217,0.05);
+    }
+
+    .contact-link:hover {
+      border-color: var(--p600);
+      color: var(--p700);
+      background: var(--purple-dim);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(109,40,217,0.13);
+    }
+
+    .contact-link svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg2);
+      border-top: 1.5px solid var(--border);
+      padding: 1.4rem 5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative; z-index: 1;
+    }
+
+    footer span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero           { animation: fadeUp 0.8s 0.05s ease both; }
+    .tools-section  { animation: fadeUp 0.8s 0.10s ease both; }
+    .skills-section { animation: fadeUp 0.8s 0.15s ease both; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 960px) {
+      .navbar { top: 12px; right: 12px; }
+      .hero { grid-template-columns: 1fr; padding: 7rem 1.75rem 3rem; }
+      .hero-card { display: none; }
+      .tools-section, .skills-section, .experience-section,
+      .education-section, .contact-section, footer { padding-left: 1.75rem; padding-right: 1.75rem; }
+      .section-label { padding: 0 1.75rem; }
+      .achievements-strip { grid-template-columns: 1fr 1fr; padding: 2rem 1.75rem; }
+      .exp-entry { grid-template-columns: 1fr; gap: 1rem; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .hero-name-wrap::before,
+      .hero-name-wrap::after { inset: -8px -12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="#tools">Tools</a>
+  <a href="#skills">Skills</a>
+  <a href="#experience">Experience</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      Available for new opportunities
+    </div>
+
+    <div class="hero-name-wrap">
+      <div class="hero-name">Venkatesan S</div>
+    </div>
+
+    <div class="hero-role" style="margin-top:1.2rem">Quality Service Associate <span>/ QA Engineer</span></div>
+    <div class="hero-company">at <strong>Amazon</strong> Development Center &nbsp;·&nbsp; Team Goodreads &nbsp;·&nbsp; Chennai</div>
+
+    <p class="hero-desc">
+      2+ years ensuring end-to-end quality for Goodreads — serving 150+ million users across Web, Android, and iOS. I don't just find bugs; I build tools that prevent them.
+    </p>
+
+    <div class="hero-badges">
+      <span class="badge highlight">🏆 Hackathon 2025 Runner-Up</span>
+      <span class="badge">Playwright</span>
+      <span class="badge">Selenium</span>
+      <span class="badge">Espresso</span>
+      <span class="badge">CI/CD</span>
+    </div>
+
+    <div class="hero-cta">
+      <a href="/cdn-cgi/l/email-protection#265043484d4752435547485512101e1666414b474f4a0845494b" class="btn btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        Get in Touch
+      </a>
+      <a href="https://www.linkedin.com/in/venkatesan-s-0982bb264" target="_blank" class="btn btn-outline">
+        LinkedIn ↗
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <div class="hackathon-banner">
+      <span class="trophy">🏆</span>
+      <p><strong>Hackathon 2025</strong><br/>Runner-Up · Innovative Category</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num">150M+</div><div class="stat-label">Users Served</div></div>
+      <div class="stat"><div class="stat-num">30%</div><div class="stat-label">More Bugs Found</div></div>
+      <div class="stat"><div class="stat-num">84h</div><div class="stat-label">Saved / Cycle</div></div>
+      <div class="stat"><div class="stat-num">100+</div><div class="stat-label">Tests Automated</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<div class="section-label"><span>// Tools I Built</span><hr/></div>
+<section class="tools-section" id="tools">
+  <div class="section-h">Internal tools I engineered</div>
+  <div class="section-sub">Beyond testing — I build automation tools that save real hours every day.</div>
+  <div class="tools-grid">
+    <div class="tool-card playwright">
+      <span class="tool-type playwright-tag">Playwright · Automation</span>
+      <div class="tool-title">Bulk Account Management Tool</div>
+      <p class="tool-desc">Playwright-based tool that automatically logs into and bulk-deletes multiple inactive test accounts, eliminating tedious manual cleanup before and after test cycles.</p>
+      <div class="tool-impact">
+        <div class="impact-num">1h</div>
+        <div class="impact-label">manual effort saved<br/>every single day</div>
+      </div>
+      <div class="tool-tech">
+        <span class="tech-tag">Playwright</span><span class="tech-tag">TypeScript</span><span class="tech-tag">Async/Await</span><span class="tech-tag">Batch Processing</span>
+      </div>
+    </div>
+
+    <div class="tool-card playwright">
+      <span class="tool-type playwright-tag">Playwright · Automation</span>
+      <div class="tool-title">Multi-Account Creation Tool</div>
+      <p class="tool-desc">Concurrent account generation tool that provisions multiple Web labs test accounts in parallel — reducing setup time and accelerating test execution readiness significantly.</p>
+      <div class="tool-impact">
+        <div class="impact-num">⚡</div>
+        <div class="impact-label">concurrent generation<br/>faster test readiness</div>
+      </div>
+      <div class="tool-tech">
+        <span class="tech-tag">Playwright</span><span class="tech-tag">TypeScript</span><span class="tech-tag">Concurrency</span><span class="tech-tag">Test Setup</span>
+      </div>
+    </div>
+
+    <div class="tool-card env">
+      <span class="tool-type env-tag">DevTools · Environment</span>
+      <div class="tool-title">Pre-Prod to Prod Converter</div>
+      <p class="tool-desc">One-click environment switching tool enabling seamless navigation between pre-production and production — ensuring accurate production-equivalent test validation.</p>
+      <div class="tool-impact">
+        <div class="impact-num">2h</div>
+        <div class="impact-label">environment switching<br/>effort reduced per cycle</div>
+      </div>
+      <div class="tool-tech">
+        <span class="tech-tag">Browser Automation</span><span class="tech-tag">Env Config</span><span class="tech-tag">URL Mapping</span>
+      </div>
+    </div>
+
+    <div class="tool-card tamper">
+      <span class="tool-type script-tag">Tampermonkey · Integration</span>
+      <div class="tool-title">TestRail Reporting Scripts</div>
+      <p class="tool-desc">Custom Tampermonkey userscripts integrated into TestRail, streamlining test case reporting, bulk status updates, and execution tracking — all from within the browser.</p>
+      <div class="tool-impact">
+        <div class="impact-num">1h</div>
+        <div class="impact-label">reporting effort saved<br/>every single day</div>
+      </div>
+      <div class="tool-tech">
+        <span class="tech-tag">Tampermonkey</span><span class="tech-tag">JavaScript</span><span class="tech-tag">TestRail API</span><span class="tech-tag">Browser Scripts</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<div class="achievements-strip">
+  <div class="achievement"><div class="achievement-num">150M+</div><div class="achievement-label">Users on Goodreads across Web, Android & iOS</div></div>
+  <div class="achievement"><div class="achievement-num">30%</div><div class="achievement-label">More defects found vs team average — consecutive months</div></div>
+  <div class="achievement"><div class="achievement-num">84h</div><div class="achievement-label">Manual testing effort saved per regression cycle</div></div>
+  <div class="achievement"><div class="achievement-num">2+</div><div class="achievement-label">Hours saved daily across all internal tools combined</div></div>
+</div>
+
+<!-- SKILLS -->
+<div class="section-label" style="margin-top:4rem"><span>// Skills</span><hr/></div>
+<section class="skills-section" id="skills">
+  <div class="section-h">What I work with</div>
+  <div class="section-sub">Core skills highlighted · hover to explore</div>
+  <div class="skills-categories">
+    <div class="skill-category">
+      <div class="skill-category-title">Test Automation</div>
+      <div class="skill-list">
+        <span class="skill-pill core">Playwright</span><span class="skill-pill core">Selenium</span><span class="skill-pill core">Espresso</span><span class="skill-pill">Cypress</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-category-title">Programming & Scripting</div>
+      <div class="skill-list">
+        <span class="skill-pill core">Java</span><span class="skill-pill core">TypeScript</span><span class="skill-pill">JavaScript</span><span class="skill-pill">HTML / CSS</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-category-title">CI/CD & DevTools</div>
+      <div class="skill-list">
+        <span class="skill-pill core">Jenkins</span><span class="skill-pill core">Git / GitHub</span><span class="skill-pill">VS Code</span><span class="skill-pill">Android Studio</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-category-title">Testing Types</div>
+      <div class="skill-list">
+        <span class="skill-pill">E2E Testing</span><span class="skill-pill">Regression</span><span class="skill-pill">Smoke / Sanity</span><span class="skill-pill">Exploratory</span><span class="skill-pill">Black Box</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-category-title">Tools & Platforms</div>
+      <div class="skill-list">
+        <span class="skill-pill core">TestRail</span><span class="skill-pill core">JIRA</span><span class="skill-pill">Web</span><span class="skill-pill">Android</span><span class="skill-pill">iOS</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-category-title">Methodologies</div>
+      <div class="skill-list">
+        <span class="skill-pill core">Agile / Scrum</span><span class="skill-pill">SDLC</span><span class="skill-pill">STLC</span><span class="skill-pill">POM</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<div class="section-label"><span>// Experience</span><hr/></div>
+<section class="experience-section" id="experience">
+  <div class="section-h">Where I've worked</div>
+  <div class="exp-entry">
+    <div>
+      <div class="exp-company">Amazon · Goodreads</div>
+      <div class="exp-role">Quality Service Associate (QA)</div>
+      <div class="exp-period">March 2024 – Present<br/>Chennai, India</div>
+    </div>
+    <div class="exp-right">
+      <div class="exp-item">Led <strong>Test Suite Optimization</strong> initiative, eliminating redundant test cases and reducing manual testing effort by <strong>84 hours per cycle</strong>.</div>
+      <div class="exp-item">Engineered a <strong>Playwright-based bulk account management tool</strong> saving 1h of manual effort daily, and a <strong>multi-account creation tool</strong> enabling concurrent test account provisioning.</div>
+      <div class="exp-item">Built a <strong>pre-prod to prod converter</strong> reducing environment switching effort by 2 hours per cycle, ensuring accurate production-equivalent test navigation.</div>
+      <div class="exp-item">Developed <strong>Tampermonkey scripts integrated with TestRail</strong>, enhancing test reporting efficiency and saving ~1 hour per day.</div>
+      <div class="exp-item">Recognized as <strong>top defect contributor</strong> for consecutive months — consistently identifying <strong>30% more bugs</strong> than team average.</div>
+      <div class="exp-item"><strong>Automated 100+ web test cases</strong> using internal Playwright framework, reducing 8–10 hours of manual regression per cycle; improved CI pipeline reliability via Jenkins.</div>
+      <div class="exp-item">Executed end-to-end testing across <strong>Web, Android, and iOS</strong> for Goodreads — serving 150M+ users globally.</div>
+      <div class="exp-item">Participated in <strong>Hackathon 2025</strong> — awarded <strong>Runner-Up in the Innovative Category</strong>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<div class="section-label"><span>// Education</span><hr/></div>
+<section class="education-section">
+  <div class="section-h">Background</div>
+  <div class="edu-grid">
+    <div class="edu-card degree">
+      <div class="edu-type">Degree</div>
+      <div class="edu-title">B.Tech — Information Technology</div>
+      <div class="edu-institution">Hindusthan College of Engineering & Technology, Tamil Nadu</div>
+      <div class="edu-meta">CGPA: 8.65 / 10 &nbsp;·&nbsp; June 2019 – May 2023</div>
+    </div>
+    <div class="edu-card cert">
+      <div class="edu-type">Certification</div>
+      <div class="edu-title">Java Full Stack Development</div>
+      <div class="edu-institution">JSPYDERS Institute, Chennai</div>
+      <div class="edu-meta">June 2023 – December 2023</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <h2>Let's build<br/><em>something reliable.</em></h2>
+  <p class="contact-sub">Open to QA Automation Engineer roles at product-based companies &nbsp;·&nbsp; Chennai / Bangalore</p>
+  <div class="contact-links">
+    <a href="/cdn-cgi/l/email-protection#b9cfdcd7d2d8cddccad8d7ca8d8f8189f9ded4d8d0d597dad6d4" class="contact-link">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      <span class="__cf_email__" data-cfemail="e197848f8a80958492808f92d5d7d9d1a1868c80888dcf828e8c">[email&#160;protected]</span>
+    </a>
+    <a href="https://www.linkedin.com/in/venkatesan-s-0982bb264" target="_blank" class="contact-link">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM9 17H6.5v-7H9v7zm-1.25-8a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zM18 17h-2.5v-3.5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5V17H10v-7h2.5v1.1c.46-.7 1.3-1.1 2.25-1.1 1.79 0 3.25 1.46 3.25 3.25V17z"/></svg>
+      LinkedIn ↗
+    </a>
+    <a href="tel:+919360872018" class="contact-link">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.45 2.33.69 3.58.69a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.56 21 3 13.44 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.24 2.45.69 3.57a1 1 0 0 1-.23 1.02l-2.34 2.2z"/></svg>
+      +91 93608 72018
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Venkatesan S.</span>
+  <span>QA Automation Engineer · Amazon Development Center · Chennai</span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.navbar a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLin
